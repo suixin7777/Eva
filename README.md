@@ -7,18 +7,34 @@ Production deployment is a Discord bot with per-user state isolation, running on
 ## Architecture
 
 ```mermaid
-flowchart LR
-    U([User]) --> ADV
-    ADV[Advisor<br/>remote DeepSeek<br/>1 call/turn]
+flowchart TB
+    U([User message])
+    OUT([Reply])
+
+    U --> ADV[Advisor<br/>remote DeepSeek · 1 call/turn]
+
+    subgraph Core["Inference Core"]
+        direction TB
+        LM[Local Model<br/>Qwen3.5-VL-9B + LoRA]
+        V{Verifier<br/>regex + DeepSeek<br/>1 call/turn}
+        RG[Regenerate Guard]
+        LM --> V
+        V -->|fail| RG
+        RG -.retry hint.-> LM
+    end
+
+    subgraph Mem["Memory + Tools"]
+        direction TB
+        LORE[(Lore Memory<br/>FAISS + jsonl)]
+        T[Tool Runtime<br/>RememberThis · ForgetMemory<br/>MemorySearch · WebSearch · Vision]
+        NOTES[(Notes Store<br/>FAISS + jsonl<br/>per-user)]
+        T <-.R/W.-> NOTES
+    end
+
     ADV --> LM
-    LM[Local Model<br/>Qwen3.5-VL-9B + LoRA]
-    LM <--> T[Tool Runtime<br/>RememberThis · ForgetMemory<br/>MemorySearch · WebSearch · Vision]
-    LM --> V{Verifier<br/>regex + DeepSeek<br/>1 call/turn}
-    V -- pass --> U
-    V -- fail --> RG[Regenerate Guard]
-    RG --> LM
-    LORE[(Lore Memory<br/>FAISS + jsonl)] -. read .-> LM
-    NOTES[(Notes Store<br/>FAISS + jsonl<br/>per-user)] <-. read/write .-> T
+    V -->|pass| OUT
+    LORE -.read.-> LM
+    LM <-->|tool calls| T
 ```
 
 Three layers handle each turn:
