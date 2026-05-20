@@ -76,6 +76,16 @@ See [`../README.md#results`](../README.md#results) for the headline table and pe
 
 Raw run output is in [`results/`](results/).
 
+## Efficiency analysis
+
+After running the eval, you can re-derive the efficiency numbers (median tokens/turn, MAX_NEW_TOKENS-cap rate, etc.) from the saved JSON without re-running the model:
+
+```bash
+python benchmarks/analyze_efficiency.py
+```
+
+This reads `benchmarks/results/eval_v4_*.json` and prints a side-by-side comparison. See [`analyze_efficiency.py`](analyze_efficiency.py) for the exact metrics. The output of this script is what backs the **Efficiency** subsection of the main README.
+
 ## Caveats
 
 - **Sample size** — 27 chains is small. The goal is signal on the capability mix this specific agent needs, not external benchmark comparability. Each sample is hand-designed with realistic mock tool outputs.

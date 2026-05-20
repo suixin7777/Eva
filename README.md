@@ -121,6 +121,37 @@ Eval methodology, sample design, and run instructions: [`benchmarks/README.md`](
 Full eval script: [`benchmarks/eval_react_chains.py`](benchmarks/eval_react_chains.py).
 Raw run output: [`benchmarks/results/`](benchmarks/results/).
 
+### Efficiency
+
+Eva isn't just more correct — it's also dramatically less wasteful per turn. The base model **never learned to actually stop**: it emits the `<|end_react|>` marker as multi-token text, which doesn't trigger `eos`, so generation runs to the `MAX_NEW_TOKENS = 768` cap on most turns.
+
+| Metric | Base | Eva SFT | Ratio |
+|---|---|---|---|
+| Total chars generated (27 chains) | 190,860 | 13,752 | **13.9×** more for base |
+| Median raw chars / turn | 2,674 | 206 | **13.0×** |
+| Estimated tokens / turn | ~757 | ~62 | **~12×** |
+| Turns at/near MAX_NEW_TOKENS cap (≥ 2500 chars) | **54 / 72  (75%)** | **0 / 63  (0%)** | — |
+| Chains with format error | 5 / 27 | 0 / 27 | — |
+
+Raw-output length distribution is **non-overlapping**:
+
+| | min | p25 | median | p75 | max |
+|---|---|---|---|---|---|
+| Base | 1,968 | 2,501 | 2,674 | 2,793 | 3,387 |
+| Eva SFT | 120 | 168 | 206 | 267 | 405 |
+
+Eva's **longest** output (405 chars) is shorter than base's **shortest** (1,968 chars).
+
+Wall-clock time wasn't directly logged, but on identical model architecture + GPU + batch=1, inference latency is approximately linear in tokens generated. Per-chain inference work:
+
+- Base : 2.67 turns × ~757 tokens ≈ **2,020 tokens / chain**
+- Eva  : 2.33 turns × ~62 tokens ≈ **146 tokens / chain**
+- → Eva does **~14× less inference work per chain**
+
+Numbers reproducible via [`benchmarks/analyze_efficiency.py`](benchmarks/analyze_efficiency.py).
+
+**Takeaway**: the SFT didn't just teach Eva what to say — it taught her to **stop talking** when she's done. That's a much bigger latency win than the architectural changes alone could deliver.
+
 ## Tech Stack
 
 | Layer | Choice |
