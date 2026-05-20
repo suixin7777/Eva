@@ -4,6 +4,10 @@ An experimental multi-turn dialogue agent built on **Qwen3.5-VL-9B + custom LoRA
 
 Production deployment is a Discord bot with per-user state isolation, running on a single GPU pod.
 
+![Eva conversation in Discord](docs/screenshots/eva_discord_demo.png)
+
+*Live Discord conversation. A user uploads the DINO self-distillation diagram and asks Eva to walk through the centering → softmax math. Eva opens with the tsundere "Master" signal ([quantified at Results › Persona consistency](#results)), reads the image (multimodal routing), and produces a structured numerical walkthrough — three of the capabilities measured in the [27-sample benchmark](#results) below.*
+
 ## Architecture
 
 ```mermaid
