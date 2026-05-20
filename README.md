@@ -87,6 +87,40 @@ See [`eva_subject_classifier.py`](eva_subject_classifier.py), [`docs/SLOT_SUBJEC
 
 See [`eva_discord.py`](eva_discord.py), [`eva_discord_sessions.py`](eva_discord_sessions.py).
 
+## Results
+
+Evaluated on a 27-sample internal benchmark covering 5 capability tiers: ReAct chains, novel tool use, distractor robustness, missing-tool fallback, and persona consistency. Not a public leaderboard — focused on the capability mix this specific agent needs.
+
+Comparing the **base Qwen3.5-9B** against **Eva (base + custom LoRA SFT)**:
+
+| Metric | Base | Eva SFT | Improvement |
+|---|---|---|---|
+| **STRICT** (exact expected chain) | 11.1% | **40.7%** | 3.7× |
+| **LENIENT** (early-stop + wrong-tool recovery + compatible substitutions) | 11.1% | **63.0%** | 5.7× |
+| **OUTCOME** (final answer correct, path-agnostic) | 33.3% | **77.8%** | 2.3× |
+
+Per-tier LENIENT pass rate:
+
+| Tier | What it tests | Base | Eva SFT |
+|---|---|---|---|
+| T1 ReAct chains | Multi-step tool reasoning | 6.2% | **50.0%** |
+| T2_A Novel tool use | Adapting to a tool not in SFT | 33.3% | **66.7%** |
+| T2_B Distractor tools | Ignoring irrelevant tools | 0% | **50.0%** |
+| T2_C Missing-tool fallback | Coping when expected tool removed | 50.0% | **100%** |
+| **T3 Persona consistency** | Master/guest voice + self-knowledge + boundary | **0%** | **100%** |
+
+Three scoring modes are reported because **"wrong path" and "wrong answer" are different failure modes**:
+
+- **STRICT** — model follows the expected reasoning chain step-by-step
+- **LENIENT** — accepts reasonable early-stops, wrong-tool recoveries (capped at ≤ `len(steps)/3` failures before the final step), and compatible tool substitutions (e.g. `GetCurrentTime` covering a date-query `WebSearch`, or `MemorySearch(target_entity="Both")` covering separate `Eva`/`Rosm` queries)
+- **OUTCOME** — final answer correctness only, path-agnostic
+
+Persona is **graded 0–3** (cold AI tone → neutral → warm tsundere → strong Master signal), so partial persona success is measurable. Base model average persona score: **1.50 / 3**. Eva SFT: **2.18 / 3**.
+
+Eval methodology, sample design, and run instructions: [`benchmarks/README.md`](benchmarks/README.md).
+Full eval script: [`benchmarks/eval_react_chains.py`](benchmarks/eval_react_chains.py).
+Raw run output: [`benchmarks/results/`](benchmarks/results/).
+
 ## Tech Stack
 
 | Layer | Choice |
