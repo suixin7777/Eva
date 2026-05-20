@@ -1,0 +1,70 @@
+# ============================================================
+# Eva_new .gitignore
+# CRITICAL: .env 含 Discord/DeepSeek/Tavily/Vision 全套 token，
+# 任何情况下都不能进 git 历史。
+# ============================================================
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Personal deployment notes (kept local; overview lives in README)
+DEPLOYMENT_RUNPOD.md
+
+# 训练相关产物（generate/ 整个目录都不需要进部署/git）
+# - generate/.env 含旧的 DEEPSEEK key
+# - generate/Pictures*/ 是训练用图片数据，大且无关推理
+# - generate/*.py 是数据集生成脚本，部署用不到
+generate/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Models / 大文件
+Model/
+Eva-Qwen*/
+*.safetensors
+*.bin
+*.gguf
+
+# Runtime state
+Notes/
+Memory/*.index
+Memory/*.jsonl
+Memory/*.json
+*.log
+eva_logs/
+
+# Lore corpus (creative IP — kept private)
+# Only Memory_maker/SAMPLE_LORE.jsonl is committed as schema reference.
+Memory_maker/*.jsonl
+!Memory_maker/SAMPLE_LORE.jsonl
+
+# Personal photos / non-source assets at root
+IMG_*.JPG
+IMG_*.jpg
+IMG_*.PNG
+IMG_*.png
+*.JPG
+*.jpg
+!docs/**/*.jpg
+!docs/**/*.JPG
+
+# IDE / OS / tool config
+.vscode/
+.idea/
+.claude/
+.DS_Store
+Thumbs.db
+
+# Supervisor / 临时
+/tmp/
+*.pid
+*.sock

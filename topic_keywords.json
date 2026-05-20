@@ -1,0 +1,124 @@
+{
+  "_comment": "Topic-keyword dictionary for Eva memory PRE PROBE. To add new topics or expand keywords, edit this file directly — no code change required. Matching is case-insensitive whole-word/substring. The 'aliases' list is what the user query is checked against; if any alias appears in the query, the topic is considered matched and its records are pulled directly (bypassing FAISS rerank floor). FAISS still runs as a complementary path so semantic-only matches are not lost.",
+
+  "_schema": {
+    "topics": "dict[topic_label] = list of keyword aliases",
+    "subject_hints": "dict[topic_label] = preferred subject filter (Eva|Rosm|Both|Shared) or null"
+  },
+
+  "_version": "v2 (2026-05-08): comprehensive rewrite — added Toy, Sleep; expanded Childhood, Hobbies, Gifts, Pet, Greetings, Birthday family. Goal: surface-form coverage so 'do you have a toy?' actually routes.",
+
+  "topics": {
+    "Identity":          ["name", "real name", "full name", "legal name", "complete name", "called", "who are you", "your identity", "what is your name", "what is my name", "what's my name", "your full name", "louisa", "rosmarinus", "nickname"],
+    "Personality":       ["personality", "personalities", "character", "temperament", "nature", "what are you like", "how are you", "your traits", "describe yourself", "what kind of person", "what type of person"],
+
+    "Birthday":          ["birthday", "birth date", "date of birth", "born", "days until your birthday", "days until my birthday", "when were you born", "when is your birthday", "when is my birthday", "july 7", "november 25", "your birthday", "my birthday"],
+    "Birthday Memory":   ["birthday party", "birthday celebrate", "celebrated birthday", "last birthday", "previous birthday", "birthday last year", "messed up birthday", "ruined cake", "cake mistake", "birthday cake"],
+    "Birthday Behavior": ["how do you celebrate", "what do you do on your birthday", "birthday ritual", "if i forget your birthday", "forget your birthday", "forgot birthday", "birthday revenge"],
+    "Birthday Wish":     ["birthday wish", "wish for birthday", "want for birthday", "what do you wish for"],
+    "Birthday Gifts":    ["birthday gift", "birthday present", "what gift for birthday", "what do you want for birthday"],
+    "Birthday Emotion":  ["feel about birthday", "feel on birthday", "happy on birthday", "embarrassed birthday"],
+
+    "Gifts":             ["gift", "gifts", "present", "presents", "give a gift", "got a gift", "what gift", "what kind of gift", "what kinds of gift", "what kind of present", "what would you like", "want as a gift", "give you something", "send you", "send a gift", "buy you", "handmade gift", "handmade present"],
+    "Gifts Memory":      ["last gift", "gift you got", "gift you received", "music box", "what gift did", "remember the gift"],
+
+    "Activity":          ["activity", "what we did", "did together", "we did", "we went", "we visited", "did we do", "things we did", "shared activity"],
+    "Daily Tasks":       ["daily task", "daily tasks", "chores", "what do you do daily", "every day", "your job", "your duty", "responsibilities", "what do you do as a maid"],
+    "Daily Life":        ["daily life", "your day", "typical day", "average day", "regular day", "what's your day like"],
+    "Habits":            ["habit", "habits", "routine", "ritual", "always do", "tend to", "usual"],
+
+    "Social Hobby":      ["tea time", "tea-time", "tea party", "with friends", "gather", "social", "hangout", "hang out"],
+
+    "Gaming":            ["game", "games", "video game", "video games", "gaming", "play game", "play games", "playing", "favorite game", "what game", "played together", "we played", "did we play", "apex", "battlefield", "jrpg", "single-player", "co-op", "coop"],
+    "Collecting":        ["collect", "collection", "collecting", "memorabilia", "figurine", "figurines", "merch", "merchandise"],
+    "Leisure":           ["leisure", "relax", "relaxing", "free time", "spare time", "downtime", "unwind", "to chill"],
+    "Learning":          ["learn", "learning", "study", "studying", "read books", "reading"],
+
+    "Cooking":           ["cook", "cooking", "bake", "baking", "kitchen", "recipe", "recipes", "make food", "prepare food"],
+
+    "Emotion":           ["emotion", "feeling", "feel", "mood", "sad", "happy", "upset", "down", "in a bad mood"],
+    "Communication":     ["talk", "speak", "communication", "chat", "say", "how do you speak", "how do you talk", "tone"],
+    "Motivation":        ["motivation", "motivated", "drive you", "encouraging", "encouragement"],
+    "Traits":            ["trait", "traits", "what kind of person", "describe yourself", "your qualities"],
+    "Interests":         ["interest", "interests", "interested in", "what interests you"],
+    "Likes":             ["like", "likes", "love", "fond of", "favorite thing", "what do you like", "do you like"],
+    "Origin":            ["where from", "from where", "origin", "creator", "made you", "who made you", "who created", "first day", "when you were created", "how were you made", "activated", "born"],
+    "Age":               ["age", "how old", "years old", "your age"],
+
+    "Food Standards":    ["food standard", "what food do you avoid", "food preference", "food picky", "picky eating"],
+    "Food Preferences":  ["favorite food", "what do you like to eat", "food you like", "food preferences", "snack", "snacks", "favorite snack", "chocolate", "sweets", "vegetable", "vegetables"],
+
+    "Dancing":           ["dance", "danced", "dancing", "ballet", "pirouette", "twirl", "spin", "fouette", "choreography", "perform a dance", "do a dance", "danced with me"],
+    "Music":             ["music", "song", "songs", "sing", "singing", "listen to music", "favorite song", "favorite music", "playlist", "classical", "tchaikovsky"],
+    "Hobbies":           ["hobby", "hobbies", "what do you do for fun", "free time activity", "what are your hobbies", "fun things"],
+
+    "Outdoor":           ["outdoor", "outside", "outdoors", "go out", "walk outside", "walk", "walking", "jog", "jogging"],
+
+    "Food":              ["eat", "ate", "food", "meal", "dish", "fruit", "fruits", "peach", "peaches"],
+    "Drink":             ["drink", "beverage", "tea", "coffee", "juice", "water", "favorite drink"],
+
+    "Color":             ["color", "colors", "favorite color", "what color", "your color"],
+    "Season":            ["season", "favorite season", "spring", "summer", "autumn", "winter", "fall"],
+    "Weather":           ["weather", "rain", "rainy", "sunny", "snow", "windy", "storm", "rainstorm", "umbrella", "breeze"],
+
+    "Books":             ["book", "books", "read", "reading", "novel", "fairy tale", "mystery novel", "mystery"],
+    "Movies":            ["movie", "movies", "film", "films", "watch a movie", "animated movie", "animation", "anime", "cartoon", "cartoons"],
+
+    "Talent":            ["talent", "skill", "good at", "perform", "performance", "are you good", "are you talented", "what can you do well", "best at"],
+
+    "Date":              ["date", "today", "what day", "current date", "went on a date", "we dated", "our date"],
+
+    "Core Values":       ["value", "values", "principle", "believe in", "core belief", "what matters"],
+    "Dreams":            ["dream", "dreams", "aspiration", "goal", "long-term goal", "what is your dream"],
+    "Wishes":            ["wish", "wishes", "want", "hope for", "if you could wish", "for the world"],
+
+    "Friendship":        ["friend", "friends", "friendship", "your friends"],
+    "Relationship":      ["relationship", "with me", "between us", "we together", "who am i to you", "what am i to you", "who are you to me", "what are we", "are we", "you to me", "i to you"],
+
+    "Fear":              ["fear", "afraid", "scared", "frightened", "spider", "spiders"],
+    "Bravery":           ["brave", "bravery", "courage", "courageous", "fearless"],
+    "Mistakes":          ["mistake", "mistakes", "error", "messed up", "wrong", "screw up", "screwed up", "your mistakes"],
+
+    "Pet":               ["pet", "pets", "animal companion", "have a pet", "want a pet", "cat", "dog"],
+    "Ocean Animal":      ["ocean", "sea animal", "fish", "dolphin", "whale", "shark", "narwhal", "humpback"],
+
+    "Toy":               ["toy", "toys", "plushie", "plush", "stuffed animal", "stuffed toy", "stuffy", "doll", "teddy", "teddy bear", "bunny", "cuddly", "cuddly bunny", "favorite toy", "childhood toy", "have a toy", "do you have a toy", "have any toys", "play with"],
+    "Childhood":         ["childhood", "child", "as a child", "when you were young", "young", "kid", "kids", "growing up", "early days", "early years", "back then", "younger", "when you were small", "when you were little", "your past"],
+    "Sleep":             ["sleep", "sleeping", "bedtime", "before bed", "go to bed", "can't sleep", "lullaby", "tuck in"],
+
+    "Creativity":        ["creative", "creativity", "imagine", "imagination", "make stuff", "create things"],
+    "Greetings":         ["hello", "hi", "hey", "good morning", "good evening", "good afternoon", "how are you", "yo", "meow", "greetings"]
+  },
+
+  "subject_hints": {
+    "Identity": null,
+    "Personality": null,
+    "Birthday": null,
+    "Birthday Memory": "Shared",
+    "Birthday Behavior": "Eva",
+    "Birthday Wish": "Eva",
+    "Birthday Gifts": null,
+    "Birthday Emotion": null,
+    "Origin": null,
+    "Social Hobby": "Rosm",
+    "Talent": "Eva",
+    "Dancing": "Eva",
+    "Daily Tasks": "Eva",
+    "Toy": "Eva",
+    "Childhood": "Eva",
+    "Sleep": "Eva",
+    "Pet": "Eva",
+    "Ocean Animal": "Eva",
+    "Greetings": null,
+    "Relationship": "Shared",
+    "Date": "Shared",
+    "Activity": "Shared",
+    "Gifts Memory": "Shared",
+    "Cooking": "Rosm",
+    "Collecting": "Rosm",
+    "Communication": "Rosm",
+    "Motivation": "Rosm",
+    "Learning": "Rosm",
+    "Leisure": "Rosm"
+  }
+}

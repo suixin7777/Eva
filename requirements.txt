@@ -1,0 +1,27 @@
+# ============================================================
+# Eva_new (Qwen3.5-VL-9B) production deps
+# Tested on Python 3.10 + CUDA 12.4 (RunPod pytorch:2.4.0 template)
+# ============================================================
+
+# --- Inference core ---
+torch==2.4.0
+transformers==4.46.3            # 必须 < 4.50（4.50+ 的 MoE 模块依赖 torch>=2.5）
+accelerate>=0.34
+qwen-vl-utils>=0.0.10           # Qwen-VL processor 依赖
+
+# --- Retrieval ---
+sentence-transformers>=2.7      # mpnet encoder (Memory + Notes)
+faiss-cpu>=1.7.4                # 24GB 卡放 GPU 上浪费显存，CPU 足够
+rank_bm25>=0.2.2
+
+# --- External services ---
+openai>=1.30                    # DeepSeek + Vision API (走 OpenAI 兼容协议)
+requests>=2.31
+
+# --- Discord 桥接 ---
+discord.py>=2.3.2
+
+# --- 工具 ---
+numpy>=1.26
+pillow>=10.0
+matplotlib>=3.7         # block math 渲染（mathtext，不需要系统 LaTeX）
